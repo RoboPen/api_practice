@@ -36,11 +36,12 @@ public class UserServiceTest {
     @Test
     public void getUserByUsernameAfterDeletionTest() {
         Response responseCreatedUser = UserServiceSteps.createUser(expectedUser);
-        Assert.assertEquals(responseCreatedUser.getStatusCode(), 200);
+        Assert.assertEquals(responseCreatedUser.getStatusCode(), 200,
+                "Incorrect status code of response of user creation");
         UserServiceSteps.deleteUserByUsername(expectedUser.getUsername());
         Response responseDeletedUser = UserServiceSteps.getUserByUsername(expectedUser.getUsername());
         Assert.assertEquals(responseDeletedUser.getStatusCode(), 404,
-                "Incorrect status code after trying to get deleted user");
+                "User not deleted or invalid username");
     }
 
     private User createUser() {
