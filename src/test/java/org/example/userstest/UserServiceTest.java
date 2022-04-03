@@ -2,6 +2,7 @@ package org.example.userstest;
 
 import io.restassured.response.Response;
 import org.example.entities.User;
+import org.example.log.Log;
 import org.example.steps.UserServiceSteps;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -9,39 +10,47 @@ import org.testng.annotations.Test;
 import java.util.Random;
 
 public class UserServiceTest {
-    User expectedUser = createUser();
+    User user = createUser();
 
     @Test
     public void loginTest() {
-        Response responseLogin = UserServiceSteps.login(expectedUser.getUsername(), expectedUser.getPassword());
+        Log.info("User login test");
+        Response responseLogin = UserServiceSteps.login(user.getUsername(), user.getPassword());
         Assert.assertEquals(responseLogin.getStatusCode(), 200,
                 "Incorrect status code");
+        Log.info("Successful login");
     }
 
     @Test
     public void createUsersTest() {
-        Response responseCreatedUser = UserServiceSteps.createUser(expectedUser);
+        Log.info("User creation test");
+        Response responseCreatedUser = UserServiceSteps.createUser(user);
         Assert.assertEquals(responseCreatedUser.getStatusCode(), 200,
                 "Incorrect status code");
+        Log.info("User was successfully created");
     }
 
     @Test
     public void getUserByUsernameTest() {
-        Response responseCreatedUser = UserServiceSteps.createUser(expectedUser);
-        User createdUser = UserServiceSteps.getUserByUsername(expectedUser.getUsername()).as(User.class);
-        Assert.assertEquals(createdUser.getId(), expectedUser.getId(),
+        Log.info("Get user test");
+        Response responseCreatedUser = UserServiceSteps.createUser(user);
+        User createdUser = UserServiceSteps.getUserByUsername(user.getUsername()).as(User.class);
+        Assert.assertEquals(createdUser.getId(), user.getId(),
                 "Incorrect user id");
+        Assert.assertEquals(createdUser.getUsername(), user.getUsername(),
+                "Incorrect username");
+        Log.info("User was successfully retrieved");
     }
 
     @Test
-    public void getUserByUsernameAfterDeletionTest() {
-        Response responseCreatedUser = UserServiceSteps.createUser(expectedUser);
-        Assert.assertEquals(responseCreatedUser.getStatusCode(), 200,
-                "Incorrect status code of response of user creation");
-        UserServiceSteps.deleteUserByUsername(expectedUser.getUsername());
-        Response responseDeletedUser = UserServiceSteps.getUserByUsername(expectedUser.getUsername());
+    public void deleteUserTest() {
+        Log.info("Delete user test");
+        Response responseCreatedUser = UserServiceSteps.createUser(user);
+        UserServiceSteps.deleteUserByUsername(user.getUsername());
+        Response responseDeletedUser = UserServiceSteps.getUserByUsername(user.getUsername());
         Assert.assertEquals(responseDeletedUser.getStatusCode(), 404,
                 "User not deleted or invalid username");
+        Log.info("User was successfully deleted");
     }
 
     private User createUser() {

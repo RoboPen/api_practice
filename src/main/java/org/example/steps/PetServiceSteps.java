@@ -18,6 +18,10 @@ public class PetServiceSteps {
         return PET_SERVICE.postRequest(PET, pet);
     }
 
+    public static Response updatePet(Pet pet) {
+        return PET_SERVICE.postRequest(PET_BY_ID, pet);
+    }
+
     public static void deletePetById(int id) {
         PET_SERVICE.deleteRequest(PET_BY_ID, id);
     }

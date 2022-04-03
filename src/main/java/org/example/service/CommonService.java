@@ -26,6 +26,7 @@ public abstract class CommonService {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
+        headers.put("api_key", "special-key");
         requestSpecification.headers(headers);
     }
 
@@ -35,6 +36,10 @@ public abstract class CommonService {
 
     protected Response postRequest(String uri, Object body) {
         return requestSpecification.body(body).expect().when().post(prepareUri.apply(uri));
+    }
+
+    protected Response putRequest(String uri, Object body) {
+        return requestSpecification.body(body).expect().when().put(prepareUri.apply(uri));
     }
 
     protected void deleteRequest(String uri) {

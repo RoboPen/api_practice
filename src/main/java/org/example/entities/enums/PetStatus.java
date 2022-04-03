@@ -7,7 +7,6 @@ public enum PetStatus {
 
     private final String text;
 
-
     PetStatus(final String text) {
         this.text = text;
     }
